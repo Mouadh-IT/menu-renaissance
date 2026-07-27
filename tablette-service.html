@@ -312,6 +312,31 @@ table.dl2 td{padding:7px 0;border-bottom:1px dotted #E2DACB;font-variant-numeric
 .ft .fb{padding:14px 20px}
 .ft .vide2{text-align:center;padding:30px 10px;color:var(--ink3);font-size:13.5px}
 
+
+/* ================= DIAGNOSTIC ================= */
+#diag{position:fixed;inset:0;z-index:130;background:rgba(25,21,18,.6);backdrop-filter:blur(6px);
+  display:grid;place-items:center;padding:18px;opacity:0;visibility:hidden;transition:.28s}
+#diag.on{opacity:1;visibility:visible}
+.dg{background:var(--card);width:min(560px,100%);max-height:90svh;overflow:auto;border-radius:16px;
+  box-shadow:0 26px 60px -18px rgba(0,0,0,.45)}
+.dg .dh2{display:flex;align-items:center;gap:11px;padding:18px 22px;border-bottom:1px solid var(--edge)}
+.dg .dh2 b{flex:1;font-size:17px;font-weight:700}
+.dg .db{padding:8px 22px 18px}
+.chk{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--edge)}
+.chk:last-child{border-bottom:none}
+.chk .ic2{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:none;margin-top:1px}
+.chk .ic2 svg{width:15px;height:15px;color:#fff}
+.ok2{background:var(--done)} .ko2{background:var(--cash)} .wt{background:var(--edge2)}
+.chk .tx{flex:1;min-width:0}
+.chk .tx b{display:block;font-size:14.5px;font-weight:600;margin-bottom:3px}
+.chk .tx p{font-size:13px;color:var(--ink2);line-height:1.55}
+.chk .tx code{background:var(--sunk);border-radius:5px;padding:1px 6px;font-size:12px;
+  font-family:ui-monospace,monospace;word-break:break-all}
+.chk .tx .fix{margin-top:7px;background:var(--new-bg);border:1px solid rgba(184,117,20,.3);border-radius:9px;
+  padding:10px 12px;font-size:12.5px;color:#7A5A16;line-height:1.6}
+.dgf{padding:14px 22px;border-top:1px solid var(--edge);background:var(--sunk);display:flex;gap:9px}
+.dgf button{flex:1;border-radius:10px;padding:13px;font-size:13.5px;font-weight:600}
+
 /* ================= CONNEXION ================= */
 #login{position:fixed;inset:0;z-index:120;background:var(--paper);display:none;place-items:center;padding:22px}
 #login.on{display:grid}
@@ -353,6 +378,7 @@ table.dl2 td{padding:7px 0;border-bottom:1px dotted #E2DACB;font-variant-numeric
     <div class="stat"><span class="pip"></span>En direct</div>
     <div class="clock" id="clk">--:--</div>
     <button class="tool" id="demo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span>Commande test</span></button>
+    <button class="tool" id="dgb2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span>Diagnostic</span></button>
     <button class="tool" id="out" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span>Quitter</span></button>
     <button class="tool" id="snd" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.4 18.4a9 9 0 0 0 0-12.7"/></svg><span>Son</span></button>
   </div>
@@ -360,6 +386,13 @@ table.dl2 td{padding:7px 0;border-bottom:1px dotted #E2DACB;font-variant-numeric
 </header>
 
 <main id="main"></main>
+<div id="diag"><div class="dg">
+  <div class="dh2"><b>Diagnostic de la connexion</b>
+    <button class="close" data-dgx="1" aria-label="Fermer">&times;</button></div>
+  <div class="db" id="dgb"></div>
+  <div class="dgf"><button class="go" style="--tone:var(--ink)" data-dgr="1">Relancer les tests</button>
+    <button class="sec" data-dgx="1">Fermer</button></div>
+</div></div>
 <div id="login">
   <form class="lg" id="lgf">
     <div class="mono">LR</div>
@@ -379,6 +412,7 @@ table.dl2 td{padding:7px 0;border-bottom:1px dotted #E2DACB;font-variant-numeric
 <div id="fac"><div class="doc" id="facin"></div></div>
 <div id="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 21a2 2 0 0 0 3.4 0"/><path d="M22 8c0-2.3-.8-4.3-2-6"/><path d="M3.3 15.3A1 1 0 0 0 4 17h16a1 1 0 0 0 .7-1.7C19.4 14 18 12.5 18 8A6 6 0 0 0 6 8c0 4.5-1.4 6-2.7 7.3"/><path d="M4 2C2.8 3.7 2 5.7 2 8"/></svg><div><b id="nb"></b> <span id="ns"></span></div></div>
 
+<script src="config.js"></script>
 <script>
 /* ---------- CONFIG DES ÉTAPES ---------- */
 const ST={
@@ -467,10 +501,10 @@ const ico=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
      url = "Project URL"        ex. https://abcdefgh.supabase.co
      cle = "anon public" key    (celle-ci est publique, c'est normal)
    ==================================================================== */
-const SUPA = {
-  url:"https://hozehidavynpiqcvxara.supabase.co",
-  cle:"sb_publishable_Efrk7t-pjAhRaQeMeOsQfA_u3CsQ8pc"
-};
+/* Identifiants : voir config.js (chargé juste avant ce script).
+   Valeurs de repli si le fichier est absent -> mode démo. */
+const _C = window.LR_CONFIG || {};
+const SUPA = { url:(_C.supabase&&_C.supabase.url)||"", cle:(_C.supabase&&_C.supabase.cle)||"" };
 
 const DB = (()=>{
   let sb=null, pret=false, onNew=null, onMaj=null;
@@ -1095,6 +1129,137 @@ document.getElementById("out").onclick=async ()=>{
   orders=[]; histo=[]; paint(true);
   montrerLogin(true);
 };
+
+
+/* ================================================================
+   DIAGNOSTIC — teste chaque maillon et dit précisément ce qui casse
+   ================================================================ */
+const I_OK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+const I_KO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+const I_WT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 6v6l4 2"/></svg>';
+
+function ligneDiag(etat,titre,txt,fix){
+  const c={ok:"ok2",ko:"ko2",attente:"wt"}[etat], i={ok:I_OK,ko:I_KO,attente:I_WT}[etat];
+  return `<div class="chk"><span class="ic2 ${c}">${i}</span><div class="tx"><b>${titre}</b>
+    <p>${txt}</p>${fix?`<div class="fix">${fix}</div>`:""}</div></div>`;
+}
+
+async function diagnostic(){
+  const box=document.getElementById("dgb");
+  box.innerHTML=ligneDiag("attente","Tests en cours…","Patientez quelques secondes.");
+  document.getElementById("diag").classList.add("on");
+  const R=[];
+
+  // 1. identifiants renseignés
+  if(!SUPA.url||!SUPA.cle){
+    R.push(ligneDiag("ko","Identifiants absents","Les champs <code>SUPA.url</code> et <code>SUPA.cle</code> sont vides.",
+      "Renseignez-les en haut du fichier, dans <b>les deux</b> applications."));
+    box.innerHTML=R.join(""); return;
+  }
+  R.push(ligneDiag("ok","Identifiants renseignés",`Projet <code>${esc(SUPA.url.replace("https://","").split(".")[0])}</code>`));
+
+  // 2. bibliothèque + serveur joignable
+  let sb=null;
+  try{
+    await DB.init();
+    sb=DB.client;
+    if(!sb) throw new Error("client non initialisé");
+    R.push(ligneDiag("ok","Serveur joignable","La bibliothèque Supabase est chargée et l'adresse répond."));
+  }catch(e){
+    R.push(ligneDiag("ko","Serveur injoignable",`Erreur : <code>${esc(e.message)}</code>`,
+      "Vérifiez la connexion internet du poste, puis que l'URL du projet est correcte (une faute de frappe suffit). "+
+      "Si le message parle de <code>jsdelivr</code>, c'est le chargement de la bibliothèque qui est bloqué (pare-feu, filtrage)."));
+    box.innerHTML=R.join(""); return;
+  }
+
+  // 3. la table existe-t-elle ?
+  try{
+    const { error } = await sb.from("commandes").select("id",{count:"exact",head:true}).limit(1);
+    if(error) throw error;
+    R.push(ligneDiag("ok","Table « commandes » présente","Le script schema.sql a bien été exécuté."));
+  }catch(e){
+    const m=String(e.message||e);
+    if(/does not exist|relation|schema cache/i.test(m)){
+      R.push(ligneDiag("ko","Table « commandes » absente",`Erreur : <code>${esc(m)}</code>`,
+        "Le script <b>schema.sql</b> n'a pas été exécuté. Supabase → SQL Editor → New query → collez tout le fichier → Run."));
+      box.innerHTML=R.join(""); return;
+    }
+    if(/permission|policy|RLS|row-level/i.test(m)){
+      R.push(ligneDiag("ok","Table présente et protégée","La sécurité RLS est active — c'est le comportement attendu."));
+    }else{
+      R.push(ligneDiag("ko","Lecture impossible",`Erreur : <code>${esc(m)}</code>`));
+    }
+  }
+
+  // 4. session du personnel
+  const sess = await DB.session();
+  if(sess){
+    R.push(ligneDiag("ok","Personnel connecté",`Compte <code>${esc(sess.user.email)}</code>`));
+  }else{
+    R.push(ligneDiag("ko","Personnel non connecté","Aucune session ouverte sur ce poste.",
+      "Sans connexion, la tablette ne peut PAS lire les commandes (la sécurité l'interdit). "+
+      "Créez un compte : Supabase → Authentication → Users → Add user, puis connectez-vous sur la tablette."));
+  }
+
+  // 5. lecture réelle des commandes
+  if(sess){
+    try{
+      const { data, error } = await sb.from("commandes").select("id,numero,statut").limit(5);
+      if(error) throw error;
+      R.push(ligneDiag("ok","Lecture des commandes",
+        `${data.length} commande${data.length>1?"s":""} lisible${data.length>1?"s":""} depuis ce poste.`));
+    }catch(e){
+      R.push(ligneDiag("ko","Lecture refusée",`Erreur : <code>${esc(e.message)}</code>`,
+        "La politique de sécurité bloque la lecture. Relancez la section 4 de schema.sql."));
+    }
+  }
+
+  // 6. temps réel
+  await new Promise(res=>{
+    let fini=false;
+    const ch=sb.channel("diag-"+Date.now())
+      .on("postgres_changes",{event:"*",schema:"public",table:"commandes"},()=>{})
+      .subscribe(st=>{
+        if(fini)return;
+        if(st==="SUBSCRIBED"){ fini=true;
+          R.push(ligneDiag("ok","Temps réel actif","La tablette recevra les commandes instantanément."));
+          sb.removeChannel(ch); res();
+        }
+        if(st==="CHANNEL_ERROR"||st==="TIMED_OUT"){ fini=true;
+          R.push(ligneDiag("ko","Temps réel inactif",`État : <code>${st}</code>`,
+            "La table n'est pas publiée en temps réel. Supabase → SQL Editor → exécutez :<br>"+
+            "<code>alter publication supabase_realtime add table commandes;</code>"));
+          sb.removeChannel(ch); res();
+        }
+      });
+    setTimeout(()=>{ if(!fini){ fini=true;
+      R.push(ligneDiag("ko","Temps réel : pas de réponse","Le canal n'a pas répondu en 8 secondes.",
+        "Souvent un pare-feu qui bloque les connexions WebSocket. Testez sur un autre réseau (partage de connexion du téléphone)."));
+      res(); } },8000);
+  });
+
+  // 7. écriture (comme le ferait un client)
+  try{
+    const { data, error } = await sb.from("commandes")
+      .insert({ table_num:"TEST", lignes:[{n:"Test diagnostic",q:1,p:0.01}], total:0.01, source:"diagnostic" })
+      .select().single();
+    if(error) throw error;
+    R.push(ligneDiag("ok","Envoi d'une commande",
+      `Commande test n° ${data.numero} enregistrée. Le circuit client → serveur fonctionne.`,
+      "Pensez à la supprimer : Table Editor → commandes → ligne « TEST »."));
+  }catch(e){
+    R.push(ligneDiag("ko","Envoi impossible",`Erreur : <code>${esc(e.message)}</code>`,
+      "C'est ce qui empêche les clients de commander. Vérifiez la politique d'insertion (section 4 de schema.sql)."));
+  }
+
+  box.innerHTML=R.join("");
+}
+
+document.getElementById("dgb2").onclick=diagnostic;
+document.addEventListener("click",e=>{
+  if(e.target.closest("[data-dgx]")||e.target.id==="diag"){ document.getElementById("diag").classList.remove("on"); }
+  if(e.target.closest("[data-dgr]")) diagnostic();
+});
 
 /* ---------- DÉMARRAGE ---------- */
 let serviceLance=false;
